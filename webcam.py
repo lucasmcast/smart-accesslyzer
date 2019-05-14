@@ -3,8 +3,8 @@ import numpy as np
 import os
 
 print(cv2.__file__)
-camera = cv2.VideoCapture("rtsp://admin:felix5803001234@189.114.223.154:554/h264/ch5/main/av_stream")
-#rtsp://admin:felix5803001234@189.114.223.154:554/h264/ch1/main/av_stream
+camera = cv2.VideoCapture("rtsp://usuario:senha@dominio/ip:554/h264/ch5/main/av_stream")
+#rtsp://usuario:senha@dominio/ip:554/h264/ch1/main/av_stream
 #"http://138.118.33.201:80/mjpg/video.mjpg"
 #Define the codec and create VideoWriter object
 fourcc = cv2.VideoWriter_fourcc(*'X264')
