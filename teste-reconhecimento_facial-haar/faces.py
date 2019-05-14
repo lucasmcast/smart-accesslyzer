@@ -1,6 +1,7 @@
 import cv2 as cv
 import numpy as np
 import pickle
+from thread.VideoStream import VideoStream
 
 face_cascade = cv.CascadeClassifier('haarcascade_frontalface_default.xml')
 recognizer = cv.face.LBPHFaceRecognizer_create()
@@ -11,11 +12,11 @@ with open("labels.pickle", "rb") as f:
     labels = pickle.load(f)
     labels = {v:k for k,v in labels.items()}
 
-cap = cv.VideoCapture(0)
+cap = VideoStream(src=0).start()
 
 while True:
     #captura frame por frame
-    (ret, frame) = cap.read()
+    frame = cap.read()
     gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(gray, scaleFactor=1.5, minNeighbors=5)
 
