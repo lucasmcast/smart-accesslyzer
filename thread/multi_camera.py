@@ -2,11 +2,12 @@ import cv2
 import numpy as np
 from thread.VideoStream import VideoStream
 
-
-video1 = VideoStream("rtsp://admin:felix333235@192.168.2.50:1025/Streaming/Channels/101/").start()
-video2 = VideoStream("rtsp://admin:felix5803001234@189.114.223.154:554/h264/ch2/sub/av_stream").start()
-video3 = VideoStream("rtsp://admin:felix5803001234@189.114.223.154:554/h264/ch3/sub/av_stream").start()
-video4 = VideoStream("rtsp://admin:felix5803001234@189.114.223.154:554/h264/ch4/sub/av_stream").start()
+#URL RTSP da Hikvision
+video1 = VideoStream("rtsp://usuario:senha@192.168.2.50:1025/Streaming/Channels/101/").start()
+#URL RTSP da Tecvoz T1
+video2 = VideoStream("rtsp://usuario:senha@dominio/ip:554/h264/ch1/main/av_stream").start()
+video3 = VideoStream("rtsp://usuario:senha@dominio/ip:554/h264/ch2/main/av_stream").start()
+video4 = VideoStream("rtsp://usuario:senha@dominio/ip:554/h264/ch3/main/av_stream").start()
 
 
 while True:

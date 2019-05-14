@@ -8,7 +8,7 @@ print(dlib.__version__)
 print(dlib.__file__)
 print(cv2.__version__)
 
-cap1 = VideoStream("rtsp://admin:felix333235@192.168.2.50:1025/Streaming/Channels/102/").start()
+cap1 = VideoStream("rtsp://usuario:senha@192.168.2.50:1025/Streaming/Channels/102/").start()
 #cap = VideoStream(0).start()
 detector = dlib.get_frontal_face_detector()
 
