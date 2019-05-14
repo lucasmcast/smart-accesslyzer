@@ -1,6 +1,6 @@
 import cv2 as cv
 import numpy as np
-cap = cv.VideoCapture("rtsp://admin:felix333235!@192.168.2.50:1025/Streaming/Channels/101/")
+cap = cv.VideoCapture("rtsp://usuario:senha@192.168.2.50:1025/Streaming/Channels/101/")
 ret, frame1 = cap.read()
 prvs = cv.cvtColor(frame1,cv.COLOR_BGR2GRAY)
 hsv = np.zeros_like(frame1)
