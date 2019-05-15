@@ -3,6 +3,7 @@ import cv2 as cv
 import numpy as np
 from PIL import Image
 import pickle
+import dlib
 
 face_cascade = cv.CascadeClassifier('haarcascade_frontalface_default.xml')
 recognizer = cv.face.LBPHFaceRecognizer_create()
@@ -10,8 +11,8 @@ recognizer = cv.face.LBPHFaceRecognizer_create()
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 image_dir = os.path.join(BASE_DIR, "imagens")
 
-print(image_dir)
 print(BASE_DIR)
+print(image_dir)
 
 current_id = 0
 label_ids = {}
@@ -19,6 +20,7 @@ y_labels = []
 x_train = []
 
 for root, dirs, files in os.walk(image_dir):
+    print(root)
     for file in files:
         if file.endswith("png") or file.endswith("jpg"):
             path = os.path.join(root, file)
@@ -35,7 +37,9 @@ for root, dirs, files in os.walk(image_dir):
             #y_labels.append(label) #some number
             #x_train.append(path) # verify this image, turn into a NUMPY array, gray
             pil_image =  Image.open(path).convert("L") #grayscale
-            image_array = np.array(pil_image, "uint8")
+            size = (550, 550)
+            final_image = pil_image.resize(size, Image.ANTIALIAS)
+            image_array = np.array(final_image, "uint8")
             print(pil_image)
             print(image_array)
 

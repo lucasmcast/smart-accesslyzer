@@ -1,6 +1,6 @@
 # smart-accesslyzer
 
 <h2>Requisitos:</h2><br>
-OpenCV:  4.0.1<br>
-Dlib:  19.4.0<br>
-Numpy:  1.11.3<br>
+OpenCV:  3.4.3<br>
+Dlib:  19.10.0<br>
+Numpy:  1.14.3<br>

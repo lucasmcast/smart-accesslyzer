@@ -1,8 +1,12 @@
 import cv2 as cv
 import numpy as np
 import pickle
+from thread.VideoStream import VideoStream
 
 face_cascade = cv.CascadeClassifier('haarcascade_frontalface_default.xml')
+eye_cascade = cv.CascadeClassifier('haarcascade_eye.xml')
+smile_cascade = cv.CascadeClassifier('haarcascade_smile.xml')
+
 recognizer = cv.face.LBPHFaceRecognizer_create()
 recognizer.read("trainner.xml")
 
@@ -11,11 +15,11 @@ with open("labels.pickle", "rb") as f:
     labels = pickle.load(f)
     labels = {v:k for k,v in labels.items()}
 
-cap = cv.VideoCapture(0)
+cap = VideoStream(src=0).start()
 
 while True:
     #captura frame por frame
-    (ret, frame) = cap.read()
+    frame = cap.read()
     gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(gray, scaleFactor=1.5, minNeighbors=5)
 
@@ -35,13 +39,16 @@ while True:
             cv.putText(frame, name, (x,y), font, 1, color, stroke, cv.LINE_AA)
 
         img_item = "my-image.png"
-        cv.imwrite(img_item, roi_gray)
+        cv.imwrite(img_item, frame)
 
         color = (0, 255, 0)
         stroke = 2
         end_cord_x = x + w
         end_cord_y = y + h
         cv.rectangle(frame, (x, y), (end_cord_x, end_cord_y), color, stroke)
+        eyes = eye_cascade.detectMultiScale(roi_gray, scaleFactor=1.5, minNeighbors=5)
+        for (ex, ey, ew, eh) in eyes:
+            cv.rectangle(roi_color, (ex, ey), (ex+ew, ey+eh), (20,0,255), 2)
 
     #frame = cv.resize(frame, (320, 240))
 
@@ -49,5 +56,5 @@ while True:
     if cv.waitKey(20) & 0xFF == ord('q'):
         break
 
-cap.release()
+cap.stop()
 cv.destroyAllWindows()
