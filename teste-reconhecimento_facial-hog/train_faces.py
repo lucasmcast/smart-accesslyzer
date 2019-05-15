@@ -11,7 +11,6 @@ reconhecimento_facial = dlib.face_recognition_model_v1("recursos/dlib_face_recog
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 image_dir = os.path.join(BASE_DIR, "imagens")
 
-print(BASE_DIR)
 print(image_dir)
 
 for root, dirs, files in os.walk(image_dir):
