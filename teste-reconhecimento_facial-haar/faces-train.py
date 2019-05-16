@@ -52,7 +52,7 @@ for root, dirs, files in os.walk(image_dir):
 
 print(x_train)
 print(y_labels)
-
+print("Labels", label_ids)
 with open("labels.pickle", "wb") as f:
     pickle.dump(label_ids, f)
 

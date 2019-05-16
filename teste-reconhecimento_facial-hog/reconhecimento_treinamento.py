@@ -16,7 +16,7 @@ descritores_faciais = None
 
 #percorre arquivo por arquivo com o laço for
 for arquivo in glob.glob(os.path.join("fotos/treinamento", "*.jpg")):
-
+    print(arquivo)
     imagem = cv2.imread(arquivo)
     faces_detectadas = detector_face(imagem, 1)
     numero_faces_detectadas = len(faces_detectadas)
@@ -54,11 +54,11 @@ for arquivo in glob.glob(os.path.join("fotos/treinamento", "*.jpg")):
     #cv2.imshow("Treinamento", imagem)
     #cv2.waitKey(0) & 0xFF
 #print("Tamanho: {} Formato: {}".format(len(descritores_faciais), descritores_faciais.shape))
-#print(descritores_faciais)
-#print(indice)
+print(descritores_faciais)
+print("Indices",indice)
 
-np.save("treinamento_teste/descritores_rn.npy", descritores_faciais)
-with open("treinamento_teste/indices_rn.pickle", 'wb') as f:
+np.save("descritores_rn.npy", descritores_faciais)
+with open("indices_rn.pickle", 'wb') as f:
     cPickle.dump(indice, f)
 
 cv2.destroyAllWindows()

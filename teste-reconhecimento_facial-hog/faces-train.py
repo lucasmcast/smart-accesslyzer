@@ -12,7 +12,7 @@ detector_face = dlib.get_frontal_face_detector()
 detector_pontos = dlib.shape_predictor("recursos/shape_predictor_68_face_landmarks.dat")
 reconhecimento_facial = dlib.face_recognition_model_v1("recursos/dlib_face_recognition_resnet_model_v1.dat")
 
-BASE_DIR = os.path.dirname(o.path.abspath(__file__))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 image_dir = os.path.join(BASE_DIR, "imagens")
 
 print(image_dir)
@@ -28,7 +28,7 @@ for root, dirs, files in os.walk(image_dir):
         if file.endswith("png") or file.endswith("jpg"):
             path = os.path.join(root, file)
             label = os.path.basename(root).replace(" ", "-").lower()
-            print(label, path)
+            print("Label",label, "\nPath", path)
             if not label in label_ids:
                 label_ids[label] = current_id
                 current_id += 1
