@@ -18,6 +18,7 @@ current_id = 0
 label_ids = {}
 y_labels = []
 x_train = []
+
 indice = {}
 idx = 0
 descritores_faciais = None
@@ -31,22 +32,15 @@ for root, dirs, files in os.walk(image_dir):
             path = os.path.join(root, file)
             label = os.path.basename(root).replace(" ", "-").lower()
             #print(path)
-            if not label in label_ids:
-                label_ids[label] = current_id
-                current_id += 1
 
-            id_ = label_ids[label]
-
-            #print(label_ids)
-            #print(id_)
 
             imagem = cv.imread(path)
             size = (550, 550)
             imagem = cv.resize(imagem, size)
-            print(len(imagem))
+            print("Tamanho", len(imagem))
             faces_detectadas = detector_face(imagem, 1)
             numero_faces_detectadas = len(faces_detectadas)
-            print(numero_faces_detectadas)
+            print("numero de faces", numero_faces_detectadas)
 
             if numero_faces_detectadas > 1:
                 print("Há mais de uma face na imagem {}".format(path))
@@ -56,35 +50,54 @@ for root, dirs, files in os.walk(image_dir):
                 exit(0)
 
             for face in faces_detectadas:
+                #obtem os postos facias detectado na imagem
                 pontos_faciais = detector_pontos(imagem, face)
+
+                #transforma a imagem em um VETOR com as caracteristicas da face atraves do pontos faciais
                 descritor_facial = reconhecimento_facial.compute_face_descriptor(imagem, pontos_faciais)
-                #print(format(path))
+                #print(format(path), type(descritor_facial))
 
+                #transforma em lista o vetor obtido das caracteristicas da face
                 lista_destritor_facial = [df for df in descritor_facial]
-                # print(lista_destritor_facial)
+                #print("Lista de descritores", lista_destritor_facial, type(lista_destritor_facial))
 
+                #transforma em um array do tipo numpy atraves da lista
                 np_array_descritor_facial = np.asarray(lista_destritor_facial, dtype=np.float64)
-                # print(np_array_descritor_facial)
+                #print(np_array_descritor_facial, type(np_array_descritor_facial))
 
                 np_array_descritor_facial = np_array_descritor_facial[np.newaxis, :]
-                # print(np_array_descritor_facial)
+                #print("Descritores",np_array_descritor_facial)
 
                 if descritores_faciais is None:
                     descritores_faciais = np_array_descritor_facial
                 else:
                     descritores_faciais = np.concatenate((descritores_faciais, np_array_descritor_facial), axis=0)
 
-                indice[idx] = path
+                indice[idx] = label #+ "." + str(num_foto)
+                #print(indice[idx])
                 idx += 1
+                print(idx)
 
+                """    
+                if not label in label_ids:
+                    label_ids[label] = current_id
+                    current_id += 1
+
+                id_ = label_ids[label]
+
+                print("labels_ids",label_ids[label])
+                print(id_)
+                """
             cv.imshow("Treinamento", imagem)
             cv.waitKey(0) & 0xFF
 
 print("Tamanho: {} Formato: {}".format(len(descritores_faciais), descritores_faciais.shape))
 print(descritores_faciais)
 print(indice)
-np.save("descritores_rn.npy", descritores_faciais)
-with open("indices_rn.pickle", 'wb') as f:
+
+np.save("descritores.npy", descritores_faciais)
+
+with open("indices.pickle", 'wb') as f:
     cPickle.dump(indice, f)
 
 cv.destroyAllWindows()
