@@ -1,22 +1,20 @@
-import os
 import cv2 as cv
-import pickle as cPickle
-import numpy as np
-from PIL import Image
 import dlib
+import numpy as np
+import os
 from thread.VideoStream import VideoStream
 
 detector_face = dlib.get_frontal_face_detector()
 detector_pontos = dlib.shape_predictor("recursos/shape_predictor_68_face_landmarks.dat")
 reconhecimento_facial = dlib.face_recognition_model_v1("recursos/dlib_face_recognition_resnet_model_v1.dat")
 
-indices = np.load("indices.pickle")
-descritores_faciais = np.load("descritores.npy")
+indices = np.load("recursos/indices.pickle")
+descritores_faciais = np.load("recursos/descritores.npy")
 
 #variavel responsavel por filtrar valores a baixo do ideal/precisão no reconhecimento
 limiar = 0.5
 
-cap = VideoStream("rtsp://admin:felix5803001234@10.35.27.9:554/h264/ch5/main/av_stream").start()
+cap = VideoStream(0).start()
 
 while True:
 
