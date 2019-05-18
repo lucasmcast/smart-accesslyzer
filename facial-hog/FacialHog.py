@@ -2,12 +2,11 @@ import dlib
 import numpy as np
 
 class FacialHog:
-
-
+    
     def __init__(self):
         self.detector_face = dlib.get_frontal_face_detector()
-        self.detector_pontos = dlib.shape_predictor("recursos/shape_predictor_68_face_landmarks.dat")
-        self.reconhecimento_facial = dlib.face_recognition_model_v1("recursos/dlib_face_recognition_resnet_model_v1.dat")
+        self.detector_pontos = dlib.shape_predictor("facial-hog/recursos/shape_predictor_68_face_landmarks.dat")
+        self.reconhecimento_facial = dlib.face_recognition_model_v1("facial-hog/recursos/dlib_face_recognition_resnet_model_v1.dat")
         self.indice = {}
         self.idx = 0
         self.descritores_faciais = None

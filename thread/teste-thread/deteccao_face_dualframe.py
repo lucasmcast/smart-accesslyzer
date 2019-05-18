@@ -1,6 +1,6 @@
 import cv2
-from thread.VideoStream import VideoStream
-import dlib
+import thread.VideoStream
+import dlib     
 from threading import Thread
 import numpy as np
 
@@ -8,8 +8,8 @@ print(dlib.__version__)
 print(dlib.__file__)
 print(cv2.__version__)
 
-cap1 = VideoStream("rtsp://usuario:senha@192.168.2.50:1025/Streaming/Channels/102/").start()
-#cap = VideoStream(0).start()
+#cap1 = VideoStream("rtsp://usuario:senha@192.168.2.50:1025/Streaming/Channels/102/").start()
+cap = VideoStream(0).start()
 detector = dlib.get_frontal_face_detector()
 
 def draw_rectangle(frame, faces_detectadas):
@@ -20,19 +20,19 @@ def draw_rectangle(frame, faces_detectadas):
 
 while True:
 
-    #frame = cap.read()
-    frame1 = cap1.read()
+    frame = cap.read()
+    #frame1 = cap1.read()
 
-    #frame = cv2.resize(frame, (400, 320))
-    frame1 = cv2.resize(frame1, (320, 240))
+    frame = cv2.resize(frame, (400, 320))
+    #frame1 = cv2.resize(frame1, (320, 240))
 
-    faces_detectadas = detector(frame1, 1)
+    faces_detectadas = detector(frame, 1)
     #print("Faces detectadas {}".format(len(faces_detectadas)))
 
-    draw_rectangle(frame1, faces_detectadas)
+    draw_rectangle(frame, faces_detectadas)
 
     #row_frame = np.hstack((frame, frame1))
-    cv2.imshow("Imagem", frame1)
+    cv2.imshow("Imagem", frame)
     if cv2.waitKey(1) == ord('q'):
         break
 

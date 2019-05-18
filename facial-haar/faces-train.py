@@ -8,8 +8,8 @@ import dlib
 face_cascade = cv.CascadeClassifier('haarcascade_frontalface_default.xml')
 recognizer = cv.face.LBPHFaceRecognizer_create()
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-image_dir = os.path.join(BASE_DIR, "imagens")
+BASE_DIR = os.path.dirname(os.path.abspath("facial-haar"))
+image_dir = os.path.join(BASE_DIR, "db-faces")
 
 print(BASE_DIR)
 print(image_dir)
@@ -42,7 +42,7 @@ for root, dirs, files in os.walk(image_dir):
             image_array = np.array(final_image, "uint8")
             print(pil_image)
             print(image_array)
-
+            
             faces = face_cascade.detectMultiScale(image_array, scaleFactor=1.5, minNeighbors=5)
 
             for (x, y, w, h) in faces:
