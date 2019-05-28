@@ -3,56 +3,66 @@ import dlib
 import numpy as np
 import os
 from thread import VideoStream
+from facial_hog.facial_recognition import face_recognize
+from arduino.ArduinoRead import ArduinoRead
+import time
 
-detector_face = dlib.get_frontal_face_detector()
-detector_pontos = dlib.shape_predictor("facial-hog/recursos/shape_predictor_68_face_landmarks.dat")
-reconhecimento_facial = dlib.face_recognition_model_v1("facial-hog/recursos/dlib_face_recognition_resnet_model_v1.dat")
+_dir = os.path.dirname(__file__)
+dir_ocorrencias = os.path.join(_dir, "ocorrencias")
 
-indices = np.load("facial-hog/recursos/indices.pickle")
-descritores_faciais = np.load("facial-hog/recursos/descritores.npy")
+print(dir_ocorrencias)
 
-#variavel responsavel por filtrar valores a baixo do ideal/precisão no reconhecimento
-limiar = 0.5
+def date_now_dia_mes_ano():
+    result_time = time.localtime()
+    date = "{}-{}-{}".format(result_time.tm_mday,result_time.tm_mon ,result_time.tm_year)
+    return date
+
+def date_now_full():
+    result_time = time.localtime()
+    date = "{}-{}-{}_{}:{}".format(result_time.tm_mday,result_time.tm_mon ,result_time.tm_year, result_time.tm_hour, result_time.tm_min)
+    return date
 
 cap = VideoStream(0).start()
+ardu = ArduinoRead().start()
 
+print(ardu.getPortasEmUso())
+
+font = cv.FONT_HERSHEY_SIMPLEX
+os.chdir("ocorrencias")
+cord_x = 16
+cord_y = 40
+#cap = VideoStream("rtsp://tcc2:tcc28080@192.168.2.50:1025/h264/ch1/main/av_stream").start()
 while True:
 
     frame = cap.read()
-    faces_detectadas = detector_face(frame, 0)
+    status = ardu.status_read()
+    #status01, dxporta1, texto1, color1, statu02, dxporta2, texto2, color2 = ardu.status_read()
 
-    for face in faces_detectadas:
-        e, t, d, b = (int(face.left()), int(face.top()), int(face.right()), int(face.bottom()))
-        pontos_faciais = detector_pontos(frame, face)
+    
+    cv.putText(frame, status[2], (cord_x,cord_y), font, 1.0, status[3])
+    cv.putText(frame, status[6], (cord_x,cord_y*2), font, 1.0, status[7])
 
-        descritor_facial = reconhecimento_facial.compute_face_descriptor(frame, pontos_faciais)
+    detectou, nome = face_recognize(frame)
+    
+    if detectou:
+        if not os.path.exists(date_now_dia_mes_ano()):
+            os.mkdir(date_now_dia_mes_ano())
+        img_item = nome + date_now_full()+".png"
+        cv.imwrite(img_item, frame)
 
-        lista_descritor_facial = [fd for fd in descritor_facial]
-
-        np_array_descritor_facial = np.asarray(lista_descritor_facial, dtype=np.float64)
-        np_array_descritor_facial = np_array_descritor_facial[np.newaxis, :]
-
-        distancias = np.linalg.norm(np_array_descritor_facial - descritores_faciais, axis=1)
-
-        minimo = np.argmin(distancias)
-
-        distancia_minima = distancias[minimo]
-
-        if distancia_minima <= limiar:
-            nome = os.path.split(indices[minimo])[1].split(".")[0]
-        else:
-            nome = " "
-
-        cv.rectangle(frame, (e, t), (d, b), (0, 255, 255), 2)
-        texto = "{} {:.4f}".format(nome, distancia_minima)
-        cv.putText(frame, texto, (d, t), cv.FONT_HERSHEY_COMPLEX_SMALL, 0.5, (0, 255, 255))
-
+    if status_anterior != status[0]:
+        print("deu certo")
+        
+    status_anterior = status[0]
 
     cv.imshow("Frame", frame)
-    if (cv.waitKey(1) & 0xFF == ord('q')):
+    if (cv.waitKey(1)  == ord('q')):
+        img_item = "escuro.png"
+        cv.imwrite(img_item, frame)
         break
 
-cap.stop()
+
 cv.destroyAllWindows()
+cap.stop()
 
 

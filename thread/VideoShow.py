@@ -1,10 +1,10 @@
 from threading import  Thread
 import cv2
 
-class VideoShow:
+class VideoShow():
 
-    def __init__(self, frame=None):
-        self.frame = frame
+    def __init__(self):
+        self.frame = None
         self.stopped = False
 
     def start(self):
