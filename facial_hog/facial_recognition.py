@@ -39,10 +39,12 @@ color_name = (0, 255, 255)
 color_rectangle = (0, 255, 0)
 font_text = cv.FONT_HERSHEY_COMPLEX_SMALL
 
+
+
 def face_recognize(frame):
     faces_detected = detector_face(frame, upsize)
     num_faces = len(faces_detected)
-    #print(num_faces)
+    print(num_faces)
 
     if num_faces > 0:    
         for face in faces_detected:
@@ -77,8 +79,6 @@ def face_recognize(frame):
             texto = "{} {:.4f}".format(nome, distance_min)
             cv.putText(frame, texto, (e, b+20), font_text, size_fonte, color_name)
 
-            retorno =  True, nome
-            return retorno
     else: 
         retorno = False, None
-        return retorno
+        #return retorno

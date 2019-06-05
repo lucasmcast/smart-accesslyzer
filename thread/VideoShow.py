@@ -1,11 +1,17 @@
 from threading import  Thread
 import cv2
+from thread import VideoStream
+from FacialRecognition import FacialRecognition
 
 class VideoShow():
 
-    def __init__(self):
+    def __init__(self,  capture):
+        self.capture = capture
         self.frame = None
         self.stopped = False
+        self.recognize = FacialRecognition()
+        self.show()
+        
 
     def start(self):
         Thread(target=self.show, args=()).start()
@@ -13,12 +19,14 @@ class VideoShow():
 
     def show(self):
         while not self.stopped:
+            self.frame = self.capture.read()
+            self.frame = cv2.resize(self.frame, (360,288))
+            self.recognize.face_recognize(self.frame)
             cv2.imshow("Video", self.frame)
-            if cv2.waitKey(1) == ord('q'):
-                self.stopped = True
+            cv2.waitKey(1)
 
     def stop(self):
         self.stopped = True
 
-    def putFrame(self, frame = None):
-        self.frame = frame
+    def readFrame(self):
+        return self.frame

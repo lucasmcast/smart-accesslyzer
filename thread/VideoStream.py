@@ -32,3 +32,11 @@ class VideoStream():
     def read(self):
         #retorna o frame mais recente lido
         return self.frame
+
+    #retorna a propriedade especifica do video
+    def get(self, propid):
+        return self.stream.get(propid)
+
+    #define as propriedades do video
+    def set(self, propid, value):
+        self.stream.set(propid, value)
