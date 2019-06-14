@@ -31,9 +31,10 @@ def imprime_linhas(imagem, pontos_faciais):
         pontos = np.array(pontos, dtype=np.int32)
         cv2.polylines(imagem, [pontos], p68[k][2], (255, 0, 0), 2)
 
-video_cap = VideoStream(0).start()
+video_cap = VideoStream(0)
+video_cap.start()
 detector_face =  dlib.get_frontal_face_detector()
-detector_pontos_faciais = dlib.shape_predictor("facial-hog/recursos/shape_predictor_68_face_landmarks.dat")
+detector_pontos_faciais = dlib.shape_predictor("facial_hog/recursos/shape_predictor_68_face_landmarks.dat")
 #taxa de mudança de frame
 #video_cap.set(cv2.CAP_PROP_FPS, 30)
 #Resolução

@@ -1,9 +1,10 @@
 import cv2
 from threading import Thread
 
-class VideoStream():
+class VideoStream(Thread):
 
     def __init__(self, src=0):
+        Thread.__init__(self)
         #inicializa o video da camera e le o primeiro frame do stream
         self.stream = cv2.VideoCapture(src)
         (self.grabbed, self.frame) = self.stream.read()
@@ -11,7 +12,7 @@ class VideoStream():
         #variavel utilizada para indicar se a thread foi parada
         self.stopped = False
 
-    def update(self):
+    def run(self):
         #mantem o loop infinito ate a thread ser parada
         while not self.stopped:
             #if a variavel indicar verdadeiro a thread para
@@ -24,10 +25,13 @@ class VideoStream():
     def stop(self):
         #indica que a thread sera parada
         self.stopped = True
+        self.stream.release()
 
+    """
     def start(self):
         Thread(target=self.update, args=()).start()
         return self
+    """
 
     def read(self):
         #retorna o frame mais recente lido

@@ -29,6 +29,7 @@ if not os.path.exists(nome):
     cap.stop()
     cv.destroyAllWindows()
 else:
+    print("Informe a letra s para salvar uma nova imagem")
     os.chdir(nome)
     #print(os.getcwd())
     path = "01.png"
@@ -37,7 +38,8 @@ else:
     cv.imshow("Pessoa", img)
     k = cv.waitKey(0)
     if (k == ord('s')):
-        cap = VideoStream("rtsp://tcc2:tcc28080@192.168.2.50:1025/h264/ch1/sub/av_stream").start()
+        cap = VideoStream("rtsp://tcc2:tcc28080@192.168.2.50:1025/h264/ch1/main/av_stream")
+        cap.start()
         while True:
             frame = cap.read()
 
@@ -53,9 +55,10 @@ else:
                     img_file = str(qtd_files+1)+".png"
                     cv.imwrite(img_file,frame)
                 break
-cap.stop()
+            else:
+                break
+        cap.stop()
 cv.destroyAllWindows()
-        
 start_train()      
 
 

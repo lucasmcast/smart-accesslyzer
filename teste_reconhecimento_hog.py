@@ -12,12 +12,12 @@ recognize = FacialRecognition()
 #arduino = ArduinoRead().start()
 #print("[INFO]: Arduino conectado com Sucesso")
 
-cap1 = VideoStream(0).start()
-cap = VideoStream("rtsp://tcc2:tcc28080@192.168.2.50:1025/h264/ch1/sub/av_stream").start()
+cap1 = VideoStream("rtsp://tcc2:tcc28080@192.168.2.50:1025/h264/ch1/sub/av_stream").start()
+#cap = VideoStream("rtsp://tcc2:tcc28080@192.168.2.50:1025/h264/ch1/sub/av_stream").start()
 #show = VideoShow(cap1).start()
 
-largura = int(cap.get(cv.CAP_PROP_FRAME_WIDTH))
-altura = int(cap.get(cv.CAP_PROP_FRAME_HEIGHT))
+largura = int(cap1.get(cv.CAP_PROP_FRAME_WIDTH))
+altura = int(cap1.get(cv.CAP_PROP_FRAME_HEIGHT))
 print(altura, largura)
 
 winName = 'Janela de Teste para o SOPT'

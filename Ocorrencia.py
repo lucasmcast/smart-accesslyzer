@@ -1,30 +1,34 @@
 from threading import Thread
 import os
-import time
+from datetime import date, datetime
 import cv2 as cv
+import numpy as np
 
 class Ocorrencia():
 
     BASE_DIR = os.path.dirname(__file__)
     DIR_OCORRENCIA = os.path.join(BASE_DIR, "ocorrencias")
+    DEFAULT_SIZE = (200,200)
+    DEFAULT_IMG = np.zeros(DEFAULT_SIZE, dtype=np.uint8)
 
     def __init__(self):
-        self.person_picture = (None, None)
+        self.person_picture = ("Ninguem Detectado", Ocorrencia.DEFAULT_IMG)
 
     def putOcorrencia(self, nome, frame):
         os.chdir(Ocorrencia.DIR_OCORRENCIA)
-        date = self.getDate_now_dia_mes_ano()
+        data = self.getDate_now_dia_mes_ano()
         #print(date)
         #cria a pasta para salvar as ocorrencias do dia
-        if not os.path.exists(date):
+        if not os.path.exists(data):
             print("[INFO]: Pasta do dia criada com sucesso")
-            os.mkdir(date)
+            os.mkdir(data)
             
         self.person_picture = (nome, frame)
 
     def save_img(self):
-        date = self.getDate_now_dia_mes_ano()
-        os.chdir(date)
+        os.chdir(Ocorrencia.DIR_OCORRENCIA)
+        data = self.getDate_now_dia_mes_ano()
+        os.chdir(data)
         #os.chdir(Ocorrencia.DIR_OCORRENCIA)
         time_ocorrencia = self.getDate_now_full()
         img = self.person_picture[1]
@@ -34,14 +38,14 @@ class Ocorrencia():
         
     
     def getDate_now_dia_mes_ano(self):
-        result_time = time.localtime()
-        date = "{}-{}-{}".format(result_time.tm_mday,result_time.tm_mon ,result_time.tm_year)
-        return date
+        result_time = date.today()
+        data = result_time.strftime("%d-%m-%Y")
+        return data
     
     def getDate_now_full(self):
-        result_time = time.localtime()
-        date = "{}-{}-{}_{}:{}".format(result_time.tm_mday,result_time.tm_mon ,result_time.tm_year, result_time.tm_hour, result_time.tm_min)
-        return date
+        result_time = datetime.now()
+        data = result_time.strftime("%d-%m-%Y %H:%M")
+        return data
 
     def clean_ocorrencia(self):
-        self.person_picture = (None, None)
+        self.person_picture = ("Ninguem Detectado", Ocorrencia.DEFAULT_IMG)
