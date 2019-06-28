@@ -44,3 +44,10 @@ class VideoStream(Thread):
     #define as propriedades do video
     def set(self, propid, value):
         self.stream.set(propid, value)
+
+    def isOpened(self):
+        if self.stream.isOpened():
+            return True
+        else:
+            return False
+

@@ -14,29 +14,35 @@ class Ocorrencia():
     def __init__(self):
         self.person_picture = ("Ninguem Detectado", Ocorrencia.DEFAULT_IMG)
 
+    
     def putOcorrencia(self, nome, frame):
-        os.chdir(Ocorrencia.DIR_OCORRENCIA)
+        #os.chdir(Ocorrencia.DIR_OCORRENCIA)
+        print(os.getcwd())
         data = self.getDate_now_dia_mes_ano()
-        #print(date)
+        dir_save = os.path.join(Ocorrencia.DIR_OCORRENCIA, data)
+        print(dir_save)
         #cria a pasta para salvar as ocorrencias do dia
-        if not os.path.exists(data):
+        if not os.path.exists(dir_save):
             print("[INFO]: Pasta do dia criada com sucesso")
-            os.mkdir(data)
+            os.mkdir(dir_save)
             
         self.person_picture = (nome, frame)
+        #os.chdir(Ocorrencia.BASE_DIR)
 
     def save_img(self):
         os.chdir(Ocorrencia.DIR_OCORRENCIA)
         data = self.getDate_now_dia_mes_ano()
+        if not os.path.exists(data):
+            os.mkdir(data)
         os.chdir(data)
         #os.chdir(Ocorrencia.DIR_OCORRENCIA)
         time_ocorrencia = self.getDate_now_full()
         img = self.person_picture[1]
         img_item = self.person_picture[0]+time_ocorrencia+".png"
-        cv.imwrite(img_item, img)
-        os.chdir(Ocorrencia.DIR_OCORRENCIA)
-        
-    
+        cv.imwrite(img_item, cv.cvtColor(img, cv.COLOR_RGB2BGR))
+        os.chdir(Ocorrencia.BASE_DIR)
+
+
     def getDate_now_dia_mes_ano(self):
         result_time = date.today()
         data = result_time.strftime("%d-%m-%Y")
@@ -49,3 +55,4 @@ class Ocorrencia():
 
     def clean_ocorrencia(self):
         self.person_picture = ("Ninguem Detectado", Ocorrencia.DEFAULT_IMG)
+

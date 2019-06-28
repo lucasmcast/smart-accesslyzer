@@ -12,8 +12,9 @@ from arduino.ArduinoRead import ArduinoRead
 
 ocorrencia = Ocorrencia()
 arduino = ArduinoRead().start()
-
+#cap = VideoStream("rtsp://admin:felix5803001234@10.35.27.9:554/Streaming/Channels/01")
 cap = VideoStream("rtsp://tcc2:tcc28080@192.168.2.50:1025/h264/ch1/main/av_stream")
+#cap = VideoStream(0)
 cap.start()
 #cap = VideoStream(0).start()
 recognize = FacialRecognition()
@@ -38,6 +39,7 @@ size_tex = recognize.SIZE_TEXT
 size_rect = recognize.SIZE_LINE_RECT
 font = recognize.FONT_TEXT
 nomeAnterior = ''
+statusAnterior = 0
 
 cord_x = 16
 cord_y = altura - 10
@@ -47,7 +49,7 @@ while True:
     frame = cap.read()
     status = arduino.status_read()
     
-    #status1 = status[0]
+    status1 = status[0]
     dxporta1 = status[1]
     
     frame = cv2.resize(frame, (largura, altura))
@@ -55,7 +57,7 @@ while True:
     
     cv2.putText(frame, status[2], (cord_x,cord_y), font, 1.0, status[3])
     #cv2.putText(frame, status[6], (cord_x,cord_y*2), font, 1.0, status[7])
-    
+
     detectou = recognize.detectou
     nome = recognize.nome
 
@@ -74,8 +76,15 @@ while True:
 
     if dxporta1 == 1:
         ocorrencia.save_img()
-    else:
-        ocorrencia.putOcorrencia("Ninguem Detectado", frame)
+        if statusAnterior != dxporta1:
+            statusAnterior = dxporta1
+    if status1 == 1:
+        statusAnterior = status1
+        
+    if status1 == 0 and statusAnterior == 1:
+        ocorrencia.clean_ocorrencia()
+        statusAnterior = status
+
     
     fps.update()
     fps.stop()
